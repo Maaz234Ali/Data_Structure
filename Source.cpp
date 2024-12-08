@@ -457,7 +457,7 @@ using namespace std;
 
 // Function to print a decorative border
 void printBorder() {
-    cout << BOLD << CYAN << "======================================================" << RESET << endl;
+    cout << BOLD << CYAN << "===========================================================" << RESET << endl;
 }
 
 // Main function
@@ -466,7 +466,11 @@ int main() {
     int choice;
 
     printBorder();
-    cout << BOLD << CYAN << "=== Smart Traffic Management System ===" << RESET << endl;
+    cout << endl;
+    cout << BOLD << CYAN << "===   _____   Smart Traffic Management System   _____    ===" << endl;
+    cout << "    __|_|_|__                                 __|_|_|__       " << endl;
+    cout << "   |_0_____0_|                               |_0_____0_|      " << RESET << endl;
+    cout << endl;
     printBorder();
 
     do {
