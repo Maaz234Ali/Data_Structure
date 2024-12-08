@@ -1,0 +1,277 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <cstring>
+using namespace std;
+
+const int INF = 1e9; 
+const int MAX_NODES = 100; 
+
+class TrafficGraph {
+public:
+    int adjMatrix[MAX_NODES][MAX_NODES];
+    string nodes[MAX_NODES];
+    int nodeCount;
+
+    TrafficGraph() {
+        nodeCount = 0;
+        for (int i = 0; i < MAX_NODES; i++) {
+            for (int j = 0; j < MAX_NODES; j++) {
+                adjMatrix[i][j] = (i == j) ? 0 : INF;
+            }
+        }
+    }
+
+    int getNodeIndex(const string& name) {
+        for (int i = 0; i < nodeCount; i++) {
+            if (nodes[i] == name) return i;
+        }
+        nodes[nodeCount] = name;
+        return nodeCount++;
+    }
+
+    void addRoad(const string& start, const string& end, int travelTime) {
+        int u = getNodeIndex(start);
+        int v = getNodeIndex(end);
+        adjMatrix[u][v] = travelTime;
+    }
+
+    void removeRoad(const string& start, const string& end) {
+        int u = getNodeIndex(start);
+        int v = getNodeIndex(end);
+        adjMatrix[u][v] = INF;
+    }
+
+    void loadFromFile(const string& filename) {
+        ifstream file(filename);
+        string line, start, end;
+        int travelTime;
+        while (getline(file, line)) {
+            stringstream ss(line);
+            getline(ss, start, ',');
+            getline(ss, end, ',');
+            ss >> travelTime;
+            addRoad(start, end, travelTime);
+        }
+    }
+
+    void updateRoadWeight(const string& start, const string& end, int newWeight) {
+        int u = getNodeIndex(start);
+        int v = getNodeIndex(end);
+        adjMatrix[u][v] = newWeight;
+    }
+
+    void displayGraph() {
+        cout << "\nCurrent Traffic Graph:\n";
+        for (int i = 0; i < nodeCount; i++) {
+            for (int j = 0; j < nodeCount; j++) {
+                if (adjMatrix[i][j] == INF)
+                    cout << "INF\t";
+                else
+                    cout << adjMatrix[i][j] << "\t";
+            }
+            cout << "\n";
+        }
+    }
+
+    void getCongestedRoads(int threshold) {
+        cout << "\nCongested Roads (Threshold: " << threshold << "):\n";
+        for (int i = 0; i < nodeCount; i++) {
+            for (int j = 0; j < nodeCount; j++) {
+                if (adjMatrix[i][j] > threshold && adjMatrix[i][j] < INF) {
+                    cout << nodes[i] << " -> " << nodes[j] << ": " << adjMatrix[i][j] << "\n";
+                }
+            }
+        }
+    }
+};
+
+// Vehicle Routing System
+class VehicleRouting {
+public:
+    string findShortestPath(TrafficGraph& graph, const string& start, const string& end) {
+        int dist[MAX_NODES];
+        int prev[MAX_NODES];
+        bool visited[MAX_NODES] = { false };
+
+        for (int i = 0; i < MAX_NODES; i++) {
+            dist[i] = INF;
+            prev[i] = -1;
+        }
+
+        int startIndex = graph.getNodeIndex(start);
+        int endIndex = graph.getNodeIndex(end);
+        dist[startIndex] = 0;
+
+        for (int i = 0; i < graph.nodeCount; i++) {
+            int u = -1;
+            for (int j = 0; j < graph.nodeCount; j++) {
+                if (!visited[j] && (u == -1 || dist[j] < dist[u])) {
+                    u = j;
+                }
+            }
+
+            if (u == -1 || dist[u] == INF) break;
+
+            visited[u] = true;
+
+            for (int v = 0; v < graph.nodeCount; v++) {
+                if (graph.adjMatrix[u][v] < INF && dist[u] + graph.adjMatrix[u][v] < dist[v]) {
+                    dist[v] = dist[u] + graph.adjMatrix[u][v];
+                    prev[v] = u;
+                }
+            }
+        }
+
+        if (dist[endIndex] == INF) return "No Path";
+
+        string path;
+        for (int at = endIndex; at != -1; at = prev[at]) {
+            path = graph.nodes[at] + (path.empty() ? "" : " -> ") + path;
+        }
+        return path;
+    }
+};
+
+// Emergency Vehicle Handling
+void handleEmergencyVehicle(TrafficGraph& graph, const string& start, const string& end) {
+    VehicleRouting vr;
+    string path = vr.findShortestPath(graph, start, end);
+    cout << "\nEmergency Vehicle Path: " << path << "\n";
+}
+
+// Simulate Accident and Road Closure
+void simulateAccident(TrafficGraph& graph, const string& start, const string& end) {
+    graph.removeRoad(start, end);
+    cout << "Accident simulated. Road blocked between " << start << " and " << end << ".\n";
+}
+
+// Simulation Dashboard
+void displayDashboard(TrafficGraph& graph) {
+    cout << "\n==== Simulation Dashboard ====\n";
+    graph.displayGraph();
+    cout << "==============================\n";
+}
+
+// Main Menu Functionality
+void showMenu() {
+    cout << "\n=========== Traffic Management System ===========\n";
+    cout << "1. Load Road Network from File\n";
+    cout << "2. Add a Road\n";
+    cout << "3. Remove a Road\n";
+    cout << "4. Update Road Weight\n";
+    cout << "5. Find Shortest Path\n";
+    cout << "6. Display Congested Roads\n";
+    cout << "7. Simulate Accident and Block Road\n";
+    cout << "8. Emergency Vehicle Handling\n";
+    cout << "9. Display Simulation Dashboard\n";
+    cout << "10. Exit\n";
+    cout << "=================================================\n";
+    cout << "Enter your choice: ";
+}
+
+int main() {
+    TrafficGraph graph;
+    VehicleRouting vehicleRouting;
+    int choice;
+
+    do {
+        showMenu();
+        cin >> choice;
+
+        switch (choice) {
+        case 1: {
+            string filename;
+            cout << "Enter the filename to load road network: ";
+            cin >> filename;
+            graph.loadFromFile(filename);
+            cout << "Road network loaded successfully.\n";
+            break;
+        }
+        case 2: {
+            string start, end;
+            int travelTime;
+            cout << "Enter starting point: ";
+            cin >> start;
+            cout << "Enter ending point: ";
+            cin >> end;
+            cout << "Enter travel time: ";
+            cin >> travelTime;
+            graph.addRoad(start, end, travelTime);
+            cout << "Road added successfully.\n";
+            break;
+        }
+        case 3: {
+            string start, end;
+            cout << "Enter starting point: ";
+            cin >> start;
+            cout << "Enter ending point: ";
+            cin >> end;
+            graph.removeRoad(start, end);
+            cout << "Road removed successfully.\n";
+            break;
+        }
+        case 4: {
+            string start, end;
+            int newWeight;
+            cout << "Enter starting point: ";
+            cin >> start;
+            cout << "Enter ending point: ";
+            cin >> end;
+            cout << "Enter new weight: ";
+            cin >> newWeight;
+            graph.updateRoadWeight(start, end, newWeight);
+            cout << "Road weight updated successfully.\n";
+            break;
+        }
+        case 5: {
+            string start, end;
+            cout << "Enter starting point: ";
+            cin >> start;
+            cout << "Enter ending point: ";
+            cin >> end;
+            string path = vehicleRouting.findShortestPath(graph, start, end);
+            cout << "Shortest Path: " << path << "\n";
+            break;
+        }
+        case 6: {
+            int threshold;
+            cout << "Enter congestion threshold: ";
+            cin >> threshold;
+            graph.getCongestedRoads(threshold);
+            break;
+        }
+        case 7: {
+            string start, end;
+            cout << "Enter starting point: ";
+            cin >> start;
+            cout << "Enter ending point: ";
+            cin >> end;
+            simulateAccident(graph, start, end);
+            break;
+        }
+        case 8: {
+            string start, end;
+            cout << "Enter starting point for emergency: ";
+            cin >> start;
+            cout << "Enter destination point: ";
+            cin >> end;
+            handleEmergencyVehicle(graph, start, end);
+            break;
+        }
+        case 9: {
+            displayDashboard(graph);
+            break;
+        }
+        case 10: {
+            cout << "Exiting...\n";
+            break;
+        }
+        default: {
+            cout << "Invalid choice. Please try again.\n";
+        }
+        }
+    } while (choice != 10);
+
+    return 0;
+}
