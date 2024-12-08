@@ -1,133 +1,85 @@
 Smart Traffic Management System Simulator
 
-Overview
+Introduction
 
-The Smart Traffic Management System Simulator is a project designed to mimic real-world traffic management within an urban environment. It optimizes traffic flow by leveraging data structures such as graphs, heaps, and priority queues. This simulator includes features for vehicle routing, congestion monitoring, emergency vehicle handling, and disruption simulation.
+The Smart Traffic Management System Simulator is a practical project designed to simulate real-world traffic management in urban environments. By leveraging advanced data structures such as graphs, heaps, and priority queues, this system optimizes traffic flow, dynamically adjusts traffic signals, handles congestion, and prioritizes emergency vehicles. It offers a comprehensive solution for managing urban traffic efficiently while simulating the challenges faced in real-time traffic systems.
 
-Features
+Key Features
 
-City Traffic Network (Graph Representation)
+City Traffic Network Representation:
 
-Nodes: Intersections.
+Represents the city’s traffic infrastructure as a weighted, directed graph.
+Supports dynamic addition and removal of roads and intersections.
+Visualizes the traffic network for better understanding and analysis.
 
-Edges:
- Roads connecting intersections with weights representing travel time or congestion levels.
+Dynamic Vehicle Routing:
 
-Dynamic Updates:
+Uses Dijkstra’s Algorithm to calculate optimal vehicle paths.
+Dynamically recalculates routes based on changing traffic conditions.
+Tracks vehicle movement across the network.
 
-Add/remove intersections and roads.
+Traffic Signal Management:
 
-Modify road weights dynamically based on vehicle counts.
-
-Vehicle Routing System
-
-Dynamically calculates the shortest or fastest routes using Dijkstra's Algorithm.
-
-Re-routes vehicles when traffic conditions change.
-
-Tracks vehicles to monitor their progress through the network.
-
-Traffic Signal Management
-
+Controls traffic signals at intersections to optimize vehicle flow.
 Adjusts signal timings dynamically based on traffic density.
+Implements emergency vehicle overrides for critical situations.
 
-Overrides signals for emergency vehicles.
+Congestion Monitoring:
 
-Simulates real-world traffic flow with green light durations.
+Monitors vehicle counts on roads to detect congestion.
+Identifies congested roads and reroutes traffic accordingly.
+Provides real-time updates and adjustments for smoother traffic flow.
 
-Congestion Monitoring
+Emergency Vehicle Handling:
 
-Monitors vehicle density on roads in real-time.
+Prioritizes emergency vehicles by dynamically adjusting traffic signals.
+Calculates the fastest route for emergency vehicles.
+Restores normal traffic flow after emergency vehicles pass.
 
-Adjusts road weights dynamically to simulate congestion effects.
+Accident and Road Closure Simulation:
 
-Provides rerouting options for vehicles to alleviate congestion.
+Simulates road closures or accidents affecting the network.
+Recalculates affected vehicle routes based on closures.
+Monitors the impact of road closures on traffic conditions.
 
-Emergency Vehicle Handling
+Simulation Dashboard:
 
-Prioritizes emergency vehicles by overriding normal traffic signals.
+Interactive console interface displaying real-time traffic data.
+Allows manual addition or removal of roads, intersections, and vehicles.
+Generates logs of all system actions including rerouting and signal changes.
 
-Dynamically calculates the fastest route using a graph-based approach.
+How to Run the Code
 
-Accident and Road Closure Simulation
+Prerequisites:
+C++ Compiler (GCC or Visual Studio)
+Standard C++ Libraries
+Input Files: Ensure the following CSV files are present in the same directory as the program:
 
-Closes specific roads or intersections dynamically.
+road_network.csv (Defines intersections and roads).
 
-Recalculates routes for affected vehicles.
-Simulates system performance under disruptive conditions.
-Real-Time Monitoring and Simulation Dashboard
-Interactive console-based dashboard for:
-Monitoring traffic.
-Adjusting road weights and closures.
-Managing traffic signals.
-Simulating emergency vehicle routes.
-System Requirements
-Programming Language: C++ (Standard 11 or later).
-Compiler: GCC or Visual Studio.
-Dependencies: None (Standard C++ libraries used).
+vehicles.csv (Vehicle data: ID, start, and end points).
 
-3. Input Files
-Ensure the following CSV files are available in the same directory as the program:
+traffic_signal_timings.csv (Intersection green light timings).
 
-road_network.csv: Defines intersections and roads.
+emergency_vehicles.csv (Emergency vehicle data: ID, start, end, and priority).
 
-vehicles.csv: Contains vehicle data (ID, start, and end points).
+accidents_or_closures.csv (Simulated disruptions like road closures).
+![AF](https://github.com/user-attachments/assets/66b35578-e603-469f-9f46-b9df64f41f45)
 
-traffic_signal_timings.csv: Specifies green light durations.
+![A2](https://github.com/user-attachments/assets/b3dc7502-6f9d-44cd-9303-a9e51210c878)
 
-emergency_vehicles.csv: Emergency vehicle data (ID, start, end, and priority).
+![A3](https://github.com/user-attachments/assets/dd9aa9dd-b840-4a53-90e6-e36c17daeed5)
 
-accidents_or_closures.csv: Simulated disruptions for road closures or accidents.
+![A4](https://github.com/user-attachments/assets/c066a5dd-4029-4468-82a8-5e3c393bc7c8)
 
-Usage Instructions
+![A5](https://github.com/user-attachments/assets/6ac36799-a6a8-4902-9968-6e9bbff22309)
 
-Upon launching the program, an interactive menu will guide you through the following options:
+Conclusion
 
-Load and Display All Data Files: Loads and prints the contents of all required files.
+The Smart Traffic Management System Simulator is a comprehensive and practical solution to urban traffic management challenges. By leveraging advanced data structures and algorithms, it efficiently models real-world traffic scenarios, providing dynamic routing, congestion monitoring, and traffic signal optimization. The system's ability to adapt to changing traffic conditions and prioritize emergency vehicles highlights its robustness and scalability.
 
-Add Intersection: Adds a new intersection to the network.
 
-Add Road: Connects two intersections with a road.
+This project not only serves as an academic exercise in implementing graph-based algorithms but also offers practical insights into the complexities of modern traffic systems. It demonstrates how computational techniques can address real-world problems, paving the way for smarter, more efficient urban mobility solutions.
 
-Update Road Weight: Changes the travel time for a specific road.
 
-Find Shortest Path: Calculates the shortest route between two intersections.
-
-Set Vehicle Count: Updates the vehicle count for a road.
-
-Get Vehicle Count: Displays the current vehicle count for a specific road.
-
-Close Road: Simulates a road closure.
-
-Reopen Road: Reopens a previously closed road.
-
-Simulate Disruption: Recalculates routes affected by closures or accidents.
-Emergency Vehicle Routing: Prioritizes an emergency vehicle's route.
-
-Real-Time Traffic Monitoring: Displays real-time traffic updates.
-
-Display Traffic Signal Timers: Shows current green light durations.
-
-Exit: Ends the simulation.
-
-Key Algorithms
-
-Dijkstra's Algorithm: Finds the shortest path in the traffic network.
-
-Dynamic Weight Adjustment: Modifies road weights based on real-time vehicle density.
-
-Priority-Based Traffic Signal Management: Adjusts green light durations dynamically.
-
-Emergency Vehicle Routing: Clears paths for emergency vehicles while maintaining network flow.
-
-Simulation Logs
-
-The program generates real-time logs for:
-
-Vehicle movements and routes.
-
-Changes in traffic signal durations.
-
-Road closures and reopenings.
-
-Emergency vehicle route calculations.
+By integrating features like road closure simulations, dynamic travel times, and real-time monitoring, this simulator provides a holistic view of traffic management. Its modular and interactive design ensures flexibility, making it an excellent tool for future enhancements and applications in smart city development.
